@@ -1,0 +1,106 @@
+<include file="Public/head"/>
+<body class="no-skin">
+<include file="Public/header"/>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+                <include file="Public/set"/>
+
+                <!-- /section:settings.box -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+
+                        <div id="mychart" style="width:100%;height:560px;"></div>
+
+
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+    <include file="Public/footer"/>
+
+</div><!-- /.main-container -->
+
+<include file="Public/footerjs"/>
+<!-- inline scripts related to this page -->
+<script src="__PUBLIC__/qwadmin/js/echarts.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+
+        var myChart = echarts.init(document.getElementById('mychart'));
+
+        myChart.showLoading();
+        var address = '{:U("Watershed/readconfig3")}' + '?root=r88';
+
+        $.get(address, function (data) {
+            myChart.hideLoading();
+
+            myChart.setOption(option = {
+                tooltip: {
+                    trigger: 'item',
+                    triggerOn: 'mousemove'
+                },
+                series: [
+                    {
+                        type: 'tree',
+                        initialTreeDepth: 13,
+                        data: [data],
+                        left: '2%',
+                        right: '2%',
+                        top: '6%',
+                        bottom: '6%',
+
+                        symbol: 'emptyCircle',
+
+                        orient: 'vertical',
+
+                        expandAndCollapse: true,
+
+                        label: {
+                            normal: {
+                                position: 'top',
+                                rotate: -90,
+                                verticalAlign: 'middle',
+                                align: 'right',
+                                fontSize: 9
+                            }
+                        },
+
+                        leaves: {
+                            label: {
+                                normal: {
+                                    position: 'bottom',
+                                    rotate: -90,
+                                    verticalAlign: 'middle',
+                                    align: 'left'
+                                }
+                            }
+                        },
+
+                        animationDurationUpdate: 750
+                    }
+                ]
+            });
+        });
+
+
+    })
+</script>
+</body>
+</html>

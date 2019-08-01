@@ -1,0 +1,350 @@
+<include file="Public/head"/>
+
+
+<style type="text/css">
+    #mapid {
+        height: 580px;
+    }
+
+    .hidediv {
+        display: none;
+    }
+</style>
+<body class="no-skin">
+<include file="Public/header"/>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+
+                <include file="Public/set"/>
+                <include file="Index/chart"/>
+                <!-- /section:settings.box -->
+                <div class="row">
+
+
+                    <div id="mapid"></div>
+
+
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+    <include file="Public/footer"/>
+
+</div><!-- /.main-container -->
+<div class="hidediv">
+
+    <select name="myselect" id="myselect">
+        <option value="1" selected="selected">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+    </select>
+
+    <!-- Flow-->
+    <!-- SED-->
+    <!-- TN-->
+    <!-- ON-->
+    <!-- ION-->
+    <!-- TP-->
+    <!-- Rain-->
+</div>
+<include file="Public/footerjs"/>
+<script src="__PUBLIC__/qwadmin/js/echarts.min.js"></script>
+<script src="__PUBLIC__/qwadmin/js/zdj/zdj-map.js"></script>
+<script src="__PUBLIC__/qwadmin/js/zdj/zdj-echart.js"></script>
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+
+    function getchart() {
+
+        console.log($("#myselect").val());
+        console.log($("#myguage").val());
+        console.log($("#myscenxxx").val());
+        var s = $("#myselect").val();
+        var scens = null;
+        var guage = null;
+
+        if (s < 7) {
+            var myStringArray = $("#myscenxxx").val();
+            if (myStringArray == null) {
+                scens = "";
+            } else {
+                scens = myStringArray.join(",");
+            }
+            guage = $("#myguage").val();
+
+
+        } else if (s == 7) {
+            var myStringArray = $("#pscenxxx").val();
+            if (myStringArray == null) {
+                scens = "";
+            } else {
+                scens = myStringArray.join(",");
+            }
+            guage = $("#pguage").val();
+
+        }
+        else if (s == 8) {
+            var myStringArray = $("#tscenxxx").val();
+            if (myStringArray == null) {
+                scens = "";
+            } else {
+                scens = myStringArray.join(",");
+            }
+            guage = $("#tguage").val();
+        }
+        if (s == null || guage == null || scens == null) {
+            mychart.setOption({
+                title: {
+                    x: 'center',
+                    align: 'right'
+                },
+                grid: {
+                    bottom: 80
+                },
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        animation: false,
+                        label: {
+                            backgroundColor: '#505765'
+                        }
+                    }
+                },
+
+                dataZoom: [
+                    {
+                        show: true,
+                        realtime: true,
+                        start: 65,
+                        end: 85
+                    },
+                    {
+                        type: 'inside',
+                        realtime: true,
+                        start: 65,
+                        end: 85
+                    }
+                ],
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        axisLine: {onZero: false},
+                        data: dates
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: []
+            }, true);
+            return -1;
+        } else {
+            reloadChart(s, guage, scens);
+        }
+        mychart.setOption({
+            toolbox: {
+                right: 30
+            }
+        }, false);
+
+    }
+
+    function genbase() { //cellvalue表示当前单元格的值
+
+        $.get("{:U('SWAT/genbase')}", function (data, status) {
+            alert("success");
+
+
+        });
+
+
+    }
+
+
+    $(function () {
+
+        setTimeout(function(){
+
+            $("#mapid").height( $(window).height()-160);
+            console.log("don't work???");
+            console.log($(window).height()-160);
+
+        },20);
+
+        $('.btn-base').on("click", function (e) {
+
+
+           // genbase();
+
+        });
+
+        $('#ace-chart-btn').on(ace.click_event, function (e) {
+            e.preventDefault();
+
+            $(this).toggleClass('open');
+            $('#ace-chart-box').toggleClass('open');
+        });
+
+
+        $('#zdj_chart_nav li').click(function (e) {
+            $(this).addClass('open active');
+            $(this).siblings().removeClass('open active');
+            console.log($('#zdj_chart_nav li').index(this));
+            var t = $("#myselect").val();
+            $("#myselect").val($('#zdj_chart_nav li').index(this) + 1);
+            var c = $("#myselect").val();
+            console.log("----------" + $("#myselect").val());
+
+            if (c < 7) {
+                $("#pricipitationdiv").css('display', 'none');
+                $("#tempturediv").css('display', 'none');
+                $("#hydrologicdiv").css('display', 'none');
+                $("#hydrologicdiv").css('display', 'block');
+                var $this = $('#hydrologicdiv .chosen-select');
+                $this.next().css({'width': $this.parent().width()});
+                console.log("ccccccccccccccccc");
+            }
+            if (c == 7) {
+                $("#hydrologicdiv").css('display', 'none');
+                $("#tempturediv").css('display', 'none');
+                $("#pricipitationdiv").css('display', 'none');
+                $("#pricipitationdiv").css('display', 'block');
+                var $this = $('#pricipitationdiv .chosen-select');
+                $this.next().css({'width': $this.parent().width()});
+                console.log("bbbbbbbbbbb");
+            }
+            if (c == 8) {
+                $("#hydrologicdiv").css('display', 'none');
+                $("#pricipitationdiv").css('display', 'none');
+                $("#tempturediv").css('display', 'none');
+                $("#tempturediv").css('display', 'block');
+                var $this = $('#tempturediv .chosen-select');
+                $this.next().css({'width': $this.parent().width()});
+                console.log("xxxxxxx");
+            }
+
+
+            if (t != c) {
+                $("#myselect").trigger('change');
+            }
+        });
+
+        $("#update").click(function () {
+
+            $("#upmsg").html("");
+            $("#upmsg").addClass("ace-icon fa fa-refresh fa-spin blue");
+            $.ajax({
+                type: 'GET',
+                url: '{$Think.CONFIG.UPDATE_URL}?v={$Think.CONFIG.Version}&callback=?',
+                success: function (json) {
+                    if (json.result == 'no') {
+                        $("#upmsg").html("目前还没有适合您当前版本的更新！").removeClass();
+                    } else if (json.result == 'yes') {
+                        $("#upmsg").html("检查到新版本 " + json.ver + "，请前往“系统设置”->“<a  href=\"{:U('Update/update')}\">在线升级</a>”").removeClass();
+                    }
+                },
+                error: function () {
+                    $("#upmsg").html("悲剧了，网络故障，请稍后再试！").removeClass();
+                },
+                dataType: 'json'
+            });
+
+        });
+
+        $(".btn-info.submit").click(function () {
+            var content = $("#content").val();
+            if (content == '') {
+                bootbox.dialog({
+                    title: '友情提示：',
+                    message: "反馈内容必须填写。",
+                    buttons: {
+                        "success": {
+                            "label": "确定",
+                            "className": "btn-danger"
+                        }
+                    }
+                });
+                return;
+            }
+
+            $("#form").submit();
+        });
+
+        if (!ace.vars['touch']) {
+            $('.chosen-select').chosen({allow_single_deselect: true});
+            //resize the chosen on window resize
+
+            $(window)
+                .off('resize.chosen')
+                .on('resize.chosen', function () {
+                    $('.chosen-select').each(function () {
+                        var $this = $(this);
+                        $this.next().css({'width': $this.parent().width()});
+                    })
+                }).trigger('resize.chosen');
+        }
+
+        $("#myselect").eq(0).val(1);
+        $("#myscenxxx").val({$s1});
+        $("#myscenxxx").trigger("chosen:updated");
+        $("#pscenxxx").val({$s2});
+        $("#pscenxxx").trigger("chosen:updated");
+        $("#tscenxxx").val({$s3})
+        ;
+        $("#tscenxxx").trigger("chosen:updated");
+        $("#myselect").change(getchart);
+        $("#myguage").change(getchart);
+        $("#myscenxxx").change(getchart);
+        $("#pguage").change(getchart);
+        $("#pscenxxx").change(getchart);
+        $("#tguage").change(getchart);
+        $("#tscenxxx").change(getchart);
+
+        $("#pricipitationdiv").css('display', 'none');
+        $("#tempturediv").css('display', 'none');
+        $("#hydrologicdiv").css('display', 'none');
+        $("#hydrologicdiv").css('display', 'block');
+        getchart();
+    })
+    ;
+
+</script>
+
+
+</body>
+</html>

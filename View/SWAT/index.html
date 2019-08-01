@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>{$current['title']}-{$Think.CONFIG.sitename}</title>
+
+    <meta name="keywords" content="{$Think.CONFIG.keywords}"/>
+    <meta name="description" content="{$Think.CONFIG.description}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+          integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+          crossorigin=""/>
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/bootstrap.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/font-awesome.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css//bootstrap-duallistbox.min.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/jquery-ui.css"/>
+    <link href="__PUBLIC__/qwadmin/css/chosen.css" rel="stylesheet">
+    <!-- page specific plugin styles -->
+
+    <!-- text fonts -->
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/ace-fonts.css"/>
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/ace.css" class="ace-main-stylesheet" id="main-ace-style"/>
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/ace-part2.css" class="ace-main-stylesheet"/>
+    <![endif]-->
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/ace-ie.css"/>
+
+
+    <link href="__PUBLIC__/qwadmin/css/ace-rtl.css" rel="stylesheet">
+
+    <![endif]-->
+
+    <!-- inline styles related to this page -->
+
+    <!-- ace settings handler -->
+    <script src="__PUBLIC__/qwadmin/js/ace-extra.js"></script>
+
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+    <!--[if lte IE 8]>
+    <script src="__PUBLIC__/qwadmin/js/html5shiv.js"></script>
+    <script src="__PUBLIC__/qwadmin/js/respond.js"></script>
+    <![endif]-->
+
+
+</head>
+<body class="no-skin">
+<include file="Public/header"/>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+                <include file="Public/set"/>
+
+                <!-- /section:settings.box -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+
+                        <div class="widget-box">
+
+
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div id="fuelux-wizard-container">
+                                        <div>
+                                            <ul class="steps">
+                                                <li data-step="1" class="active">
+                                                    <span class="step">1</span>
+                                                    <span class="title">选择气象情景</span>
+                                                </li>
+
+                                                <li data-step="2">
+                                                    <span class="step">2</span>
+                                                    <span class="title">选择点源输入</span>
+                                                </li>
+
+                                                <li data-step="3">
+                                                    <span class="step">3</span>
+                                                    <span class="title">选择土地利用情景</span>
+                                                </li>
+
+                                                <li data-step="4">
+                                                    <span class="step">4</span>
+                                                    <span class="title">集成模拟设置</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <hr/>
+                                        <form id="wizardform" class="form-horizontal" action="{:U('SWAT/insert')}"
+                                              method="post">
+
+                                            <div class="step-content pos-rel">
+                                                <div class="step-pane active" data-step="1">
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right">气象情景选择</label>
+
+                                                        <div class="col-xs-12 col-sm-9">
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s1_applied" value="1" type="radio"
+                                                                           class="ace"/>
+                                                                    <span class="lbl"> 两者都不应用</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s1_applied" value="2" type="radio"
+                                                                           class="ace"/>
+                                                                    <span class="lbl"> 仅应用降水情景</span>
+                                                                </label>
+                                                            </div>
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s1_applied" value="3" type="radio"
+                                                                           class="ace"/>
+                                                                    <span class="lbl"> 仅应用气温情景</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s1_applied" value="4" type="radio"
+                                                                           class="ace" checked/>
+                                                                    <span class="lbl"> 两者都应用</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="hr hr-16 hr-dotted"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right"
+                                                               for="state">降水情景</label>
+
+                                                        <div class="col-xs-12 col-sm-9">
+                                                            <select id="s1_pcp" name="s1_pcp"
+                                                                    class="col-xs-10 col-sm-5">
+                                                                <volist name="s1_pcp" id="vo">
+
+                                                                    <option value='{$vo.scen_id}'>{$vo.scen_name}</option>
+                                                                </volist>
+                                                            </select>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right"
+                                                               for="platform">气温情景</label>
+
+                                                        <div class="col-xs-12 col-sm-9">
+                                                            <div class="clearfix">
+                                                                <select class="col-xs-10 col-sm-5" id="s1_tmp"
+                                                                        name="s1_tmp">
+                                                                    <volist name="s1_tmp" id="vo">
+
+                                                                        <option value='{$vo.scen_id}'>{$vo.scen_name}</option>
+                                                                    </volist>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+
+                                                </div>
+
+                                                <div class="step-pane" data-step="2">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right">点源输入选项</label>
+
+                                                        <div class="col-xs-12 col-sm-9">
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s2_applied" value="1" type="radio"
+                                                                           class="ace"/>
+                                                                    <span class="lbl"> 不应用</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s2_applied" value="2" type="radio"
+                                                                           class="ace" checked/>
+                                                                    <span class="lbl"> 应用</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="hr hr-16 hr-dotted"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label no-padding-top"
+                                                               for="duallist"> 选择应用点源 </label>
+
+                                                        <div class="col-sm-8">
+                                                            <select multiple="multiple" size="10" name="zdj1[]"
+                                                                    id="duallist1">
+                                                                <volist name="duallist1" id="vo">
+
+                                                                    <option value='{$vo.id}'>{$vo.name}</option>
+                                                                </volist>
+                                                            </select>
+
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                                <div class="step-pane" data-step="3">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right">土地利用变化应用选项</label>
+
+                                                        <div class="col-xs-12 col-sm-9">
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s3_applied" value="1" type="radio"
+                                                                           class="ace"/>
+                                                                    <span class="lbl"> 不应用</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s3_applied" value="2" type="radio"
+                                                                           class="ace" checked/>
+                                                                    <span class="lbl"> 应用</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="hr hr-16 hr-dotted"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-sm-3 control-label no-padding-top"
+                                                               for="duallist2"> 选择应用土地利用变换情景 </label>
+
+                                                        <div class="col-sm-8">
+                                                            <select multiple="multiple" size="10" name="zdj2[]"
+                                                                    id="duallist2">
+                                                                <volist name="duallist2" id="vo">
+
+                                                                    <option value='{$vo.id}'>{$vo.name}</option>
+                                                                </volist>
+                                                            </select>
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="step-pane" data-step="4">
+
+
+                                                    <div class="space-2"></div>
+                                                    <div class="form-group">
+                                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right"
+                                                               for="form-field-2"> 综合模拟名称 </label>
+                                                        <div class="col-xs-12 col-sm-9">
+                                                            <input type="text" name="simulate_name" id="simulate_name"
+                                                                   placeholder="请输入综合模拟名称"
+                                                                   class="col-xs-10 col-sm-5" value="">
+
+                                                            <br/>
+                                                            <div class="hr hr-16 hr-dotted"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right">景情运行选项</label>
+
+                                                        <div class="col-xs-12 col-sm-9">
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s4_exec_type" value="1" type="radio"
+                                                                           class="ace" checked/>
+                                                                    <span class="lbl"> 立即执行</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s4_exec_type" value="2" type="radio"
+                                                                           class="ace"/>
+                                                                    <span class="lbl"> 稍后执行</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="hr hr-16 hr-dotted"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+
+                                                    <div class="form-group">
+                                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right">气象情景数据生成选项</label>
+
+                                                        <div class="col-xs-12 col-sm-9">
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s4_gendata_type" value="1" type="radio"
+                                                                           class="ace"/>
+                                                                    <span class="lbl"> 两者都不生成</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s4_gendata_type" value="2" type="radio"
+                                                                           class="ace"/>
+                                                                    <span class="lbl"> 仅生成降水情景</span>
+                                                                </label>
+                                                            </div>
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s4_gendata_type" value="3" type="radio"
+                                                                           class="ace"/>
+                                                                    <span class="lbl"> 仅生成气温情景</span>
+                                                                </label>
+                                                            </div>
+
+                                                            <div>
+                                                                <label class="line-height-1 blue">
+                                                                    <input name="s4_gendata_type" value="4" type="radio"
+                                                                           class="ace" checked/>
+                                                                    <span class="lbl"> 两者都生成</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="hr hr-16 hr-dotted"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="space-2"></div>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <hr/>
+                                    <div class="wizard-actions">
+                                        <button class="btn btn-prev">
+                                            <i class="ace-icon fa fa-arrow-left"></i>
+                                            上一步
+                                        </button>
+
+                                        <button class="btn btn-success btn-next" data-last="完&nbsp;&nbsp;&nbsp;成">
+                                            下一步
+                                            <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                                        </button>
+                                    </div>
+                                </div><!-- /.widget-main -->
+                            </div><!-- /.widget-body -->
+                        </div>
+
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+    <include file="Public/footer"/>
+
+</div><!-- /.main-container -->
+
+<include file="Public/footerjs"/>
+<script src="__PUBLIC__/qwadmin/js/wizard.min.js"></script>
+<script src="__PUBLIC__/qwadmin/js/jquery.bootstrap-duallistbox.min.js"></script>
+
+<script>
+    jQuery(function ($) {
+        $('#fuelux-wizard-container')
+            .ace_wizard({
+                //step: 2 //optional argument. wizard will jump to step "2" at first
+                //buttons: '.wizard-actions:eq(0)'
+            })
+            .on('actionclicked.fu.wizard', function (e, info) {
+                /*                if (info.step == 1 && $validation) {
+                 if (!$('#validation-form').valid()) e.preventDefault();
+                 }*/
+            })
+            //.on('changed.fu.wizard', function() {
+            //})
+            .on('finished.fu.wizard', function (e) {
+
+                $('#wizardform').submit();
+
+
+            }).on('stepclick.fu.wizard', function (e) {
+            //e.preventDefault();//this will prevent clicking and selecting steps
+        });
+
+
+        var demo1 = $('select[name="zdj1[]"]').bootstrapDualListbox({
+            infoText: '<span class="label label-purple label-lg">显示全部{0}项</span>',
+            selectorMinimalHeight: "180",
+            infoTextFiltered: '<span class="label label-purple label-lg">符合过滤条件{0}项</span>',
+            filterTextClear: "显示全部",
+            filterPlaceHolder: "支持模糊过滤",
+            infoTextEmpty:'<span class="label label-purple label-lg">列表为空</span>'
+        });
+        var container1 = demo1.bootstrapDualListbox('getContainer');
+        container1.find('.btn').addClass('btn-white btn-info btn-bold');
+
+        var demo2 = $('select[name="zdj2[]"]').bootstrapDualListbox({
+            infoText: '<span class="label label-purple label-lg">显示全部{0}项</span>',
+            selectorMinimalHeight: "180",
+            infoTextFiltered: '<span class="label label-purple label-lg">符合过滤条件{0}项</span>',
+            filterTextClear: "显示全部",
+            filterPlaceHolder: "支持模糊过滤",
+            infoTextEmpty:'<span class="label label-purple label-lg">列表为空</span>'
+        });
+        var container2 = demo2.bootstrapDualListbox('getContainer');
+        container2.find('.btn').addClass('btn-white btn-info btn-bold');
+
+        $('select[name="*duallistbox_demo1[]*"]').css("height", "200px");
+
+    });
+</script>
+<!-- inline scripts related to this page -->
+
+</body>
+</html>

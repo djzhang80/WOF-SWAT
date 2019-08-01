@@ -1,0 +1,73 @@
+<html>
+<head>
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/chosen.min.css" />
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/ace.min.css" />
+
+</head>
+<body class="no-skin">
+<select data-placeholder="Choose a State..." id="form-field-select-4" class="chosen-select form-control tag-input-style" multiple="">
+    <option value="AL">Alabama</option>
+    <option value="AK">Alaska</option>
+    <option value="AZ">Arizona</option>
+    <option value="AR">Arkansas</option>
+    <option value="CA">California</option>
+    <option value="CO">Colorado</option>
+    <option value="CT">Connecticut</option>
+    <option value="DE">Delaware</option>
+    <option value="FL">Florida</option>
+    <option value="GA">Georgia</option>
+    <option value="HI">Hawaii</option>
+    <option value="ID">Idaho</option>
+    <option value="VA">Virginia</option>
+    <option value="WA">Washington</option>
+    <option value="WV">West Virginia</option>
+    <option value="WI">Wisconsin</option>
+    <option value="WY">Wyoming</option>
+</select>
+
+
+
+<div class="hidediv">
+
+    <select name="myselect" id="myselect">
+        <option value="1" selected="selected">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+    </select>
+</div>
+
+
+
+<script src="__PUBLIC__/qwadmin/js/jquery.js"></script>
+<script src="__PUBLIC__/qwadmin/assets/js/chosen.jquery.min.js"></script>
+<!-- ace scripts -->
+
+<script src="__PUBLIC__/qwadmin/assets/js/ace.min.js"></script>
+<script type="text/javascript">
+    jQuery(function($) {
+
+        if(!ace.vars['touch']) {
+            $('.chosen-select').chosen({allow_single_deselect:true});
+            //resize the chosen on window resize
+
+            $(window)
+                .off('resize.chosen')
+                .on('resize.chosen', function() {
+                    $('.chosen-select').each(function() {
+                        var $this = $(this);
+                        $this.next().css({'width': $this.parent().width()});
+                    })
+                }).trigger('resize.chosen');
+
+        }
+
+    });
+</script>
+</body>
+</html>

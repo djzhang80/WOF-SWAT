@@ -1,0 +1,275 @@
+<script>
+    var sdate = new Date("{$Think.CONFIG.sdate}");
+    var edate = new Date("{$Think.CONFIG.edate}");
+    //console.log(sdate+"------------"+edate);
+    var dates = new Array();
+    for (var i = sdate; i < edate; i.setDate(i.getDate() + 1)) {
+        dates.push(i.getFullYear() + "/" + (i.getMonth() + 1) + "/" + i.getDate());
+        // console.log("adfdasfas");
+    }
+    //console.log(dates);
+</script>
+
+
+<style type="text/css">
+
+    .ace-chart-container {
+        width: 800px;
+        height: 400px;
+    }
+
+    .ace-settings-container2 {
+        position: absolute;
+        right: 0;
+        top: 250px;
+        z-index: 10002;
+    }
+
+    .ace-chart-box.open {
+        max-width: 800px;
+        max-height: 1000px;
+        padding: 0 14px;
+        border-width: 2px;
+        -webkit-transition-delay: 0s;
+        -moz-transition-delay: 0s;
+        -o-transition-delay: 0s;
+        transition-delay: 0s;
+    }
+
+    hr {
+        border-top: 1px solid #8dee5b;
+        margin-bottom: 2px;
+        margin-top: 1px;
+
+    }
+
+    .linediv {
+
+        float: left;
+    }
+
+    #pricipitationdiv，tempturediv，hydrologicdiv{
+    vertical-align: middle
+     }
+    #pricipitationdiv *，tempturediv *，hydrologicdiv *{
+        vertical-align: middle
+    }
+</style>
+<!-- #section:settings.box -->
+<div class="ace-settings-container2" id="ace-settings-container2">
+    <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-chart-btn">
+        <i class="ace-icon fa fa-cog bigger-130"></i>
+    </div>
+
+    <div class="ace-chart-box clearfix" id="ace-chart-box">
+
+        <div class="ace-chart-container">
+
+            <div id="main-container" class="main-container ace-save-state">
+                <script type="text/javascript">
+                    try {
+                        ace.settings.loadState('main-container')
+                    } catch (e) {
+                    }
+                </script>
+
+                <div class="sidebar      h-sidebar                navbar-collapse collapse          ace-save-state"
+                     id="sidebar" data-sidebar="true" data-sidebar-scroll="true" data-sidebar-hover="true">
+                    <script type="text/javascript">
+                        try {
+                            ace.settings.loadState('sidebar')
+                        } catch (e) {
+                        }
+                    </script>
+
+
+                    <ul class="nav nav-list" style="top: 0px;" id="zdj_chart_nav">
+
+
+                        <li class="active open hover" id="zdj_chart_nav_flow">
+                            <a href="#">
+                                <i class="menu-icon fa fa-desktop"></i>
+                                <span class="menu-text">
+								径流
+							</span>
+
+
+                            </a>
+
+                            <b class="arrow"></b>
+
+
+                        </li>
+
+                        <li class="hover" id="zdj_chart_nav_sed">
+                            <a href="#">
+                                <i class="menu-icon fa fa-cog"></i>
+                                <span class="menu-text"> 泥沙 </span>
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+
+
+                        <li class="hover">
+                            <a href="#">
+                                <i class="menu-icon fa fa-pencil-square-o"></i>
+                                <span class="menu-text"> 总氮 </span>
+
+
+                            </a>
+
+                            <b class="arrow"></b>
+
+                        </li>
+
+                        <li class="hover">
+                            <a href="#">
+                                <i class="menu-icon fa fa-list-alt"></i>
+                                <span class="menu-text"> 有机氮 </span>
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+
+                        <li class="hover">
+                            <a href="#">
+                                <i class="menu-icon fa fa-calendar"></i>
+
+                                <span class="menu-text">
+								无机氮
+								</span>
+                                </span>
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+
+                        <li class="hover">
+                            <a href="#">
+                                <i class="menu-icon fa fa-picture-o"></i>
+                                <span class="menu-text"> 总磷 </span>
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                        <li class="hover" id="zdj_chart_nav_rain">
+                            <a href="#">
+                                <i class="menu-icon fa fa-tachometer"></i>
+                                <span class="menu-text"> 降水 </span>
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+
+                        <li class="hover" id="zdj_chart_nav_temp">
+                            <a href="#">
+                                <i class="menu-icon fa fa-certificate"></i>
+                                <span class="menu-text"> 溫度 </span>
+                            </a>
+
+                            <b class="arrow"></b>
+                        </li>
+                    </ul><!-- /.nav-list -->
+
+
+                </div>
+
+                <div class="main-content">
+                    <div id="pricipitationdiv" style="margin-top:8px;vertical-align:middle">
+                        <div style="display:inline-block; width:5%;position: relative;">站点</div>
+                        <div style="display:inline-block; width:15%;;position: relative;vertical-align: middle">
+                            <select
+                                    id="pguage" class="form-control">
+                                <volist name="pguages" id="vo">
+
+                                    <option value='{$vo.guage_id}'>{$vo.guage_name}</option>
+                                </volist>
+
+
+                            </select>
+                        </div>
+                        <div style="display:inline-block; width:5%;position: relative;margin-left:10px">情景</div>
+
+                        <div style="display:inline-block; width:65%;position: relative;vertical-align: middle">
+
+                            <select multiple="" class="chosen-select form-control tag-input-style"
+                                    id="pscenxxx" data-placeholder="请选择一或多个情景...">
+                                <volist name="pscens" id="vo">
+
+                                    <option value='{$vo.scen_id}'>{$vo.scen_name}</option>
+                                </volist>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div id="tempturediv" style="margin-top:8px;vertical-align:middle">
+                        <div style="display:inline-block; width:5%;position: relative;">站点</div>
+                        <div style="display:inline-block; width:15%;;position: relative;vertical-align: middle">
+                            <select
+                                    id="tguage" class="form-control">
+                                <volist name="tguages" id="vo">
+
+                                    <option value='{$vo.guage_id}'>{$vo.guage_name}</option>
+                                </volist>
+
+
+                            </select>
+                        </div>
+                        <div style="display:inline-block; width:5%;position: relative;margin-left:10px">情景</div>
+
+                        <div style="display:inline-block; width:65%;position: relative;vertical-align: middle">
+
+                            <select multiple="" class="chosen-select form-control tag-input-style"
+                                    id="tscenxxx" data-placeholder="请选择一或多个情景...">
+                                <volist name="tscens" id="vo">
+
+                                    <option value='{$vo.scen_id}'>{$vo.scen_name}</option>
+                                </volist>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div id="hydrologicdiv" style="margin-top:8px;vertical-align:middle">
+                        <div style="display:inline-block; width:5%;position: relative;">站点</div>
+                        <div style="display:inline-block; width:15%;;position: relative;vertical-align: middle">
+                            <select
+                                    id="myguage" class="form-control">
+                                <volist name="guages" id="vo">
+
+                                    <option value='{$vo.guage_id}'>{$vo.guage_name}</option>
+                                </volist>
+
+
+                            </select>
+                        </div>
+                        <div style="display:inline-block; width:5%;position: relative;margin-left:10px">情景</div>
+
+                        <div style="display:inline-block; width:65%;position: relative;vertical-align: middle">
+
+                            <select multiple="" class="chosen-select form-control tag-input-style"
+                                    id="myscenxxx" data-placeholder="请选择一或多个情景...">
+                                <volist name="scens" id="vo">
+
+                                    <option value='{$vo.scen_id}'>{$vo.scen_name}</option>
+                                </volist>
+                            </select>
+                        </div>
+
+                    </div>
+                    <!-----form--->
+                    <hr style="position:relative">
+
+                    <!-----form--->
+                    <div id="mychart" style="width: 800px;height:280px;"></div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div><!-- /.ace-settings-box -->
+</div><!-- /.ace-settings-container -->
+

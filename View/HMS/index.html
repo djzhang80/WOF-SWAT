@@ -1,0 +1,693 @@
+<include file="Public/headcss"/>
+<body class="no-skin">
+<include file="Public/header"/>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+                <include file="Public/set"/>
+
+                <div class="row">
+
+
+                    <div style="min-height: 208.667px;" class="col-xs-5 widget-container-col ui-sortable"
+                         id="widget-container-col-1">
+                        <div style="opacity: 1;" class="widget-box ui-sortable-handle" id="widget-box-1">
+                            <div class="widget-header">
+                                <h5 class="widget-title">历史重大洪水过程</h5>
+
+                                <div class="widget-toolbar">
+
+
+                                    <a href="#" data-action="collapse">
+                                        <i class="ace-icon fa fa-chevron-up"></i>
+                                    </a>
+
+                                    <a href="#" data-action="close">
+                                        <i class="ace-icon fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <table id="grid-table"></table>
+
+                                    <div id="grid-pager"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="min-height: 208.667px;" class="col-xs-7 widget-container-col ui-sortable"
+                         id="widget-container-col-2">
+                        <div style="opacity: 1;" class="widget-box ui-sortable-handle" id="widget-box-2">
+                            <div class="widget-header">
+                                <h5 class="widget-title">雨量站点降水过程线</h5>
+
+                                <div class="widget-toolbar">
+                                    <a href="#modal-form" data-toggle="modal" onclick="undateselect">
+                                        <i class="ace-icon fa fa-bars"></i>
+                                    </a>
+
+                                    <a href="#" data-action="collapse">
+                                        <i class="ace-icon fa fa-chevron-up"></i>
+                                    </a>
+
+                                    <a href="#" data-action="close">
+                                        <i class="ace-icon fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div id="mychart1" style="width: 100%;;height:200px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="min-height: 208.667px;" class="col-xs-7 widget-container-col ui-sortable"
+                         id="widget-container-col-3">
+                        <div style="opacity: 1;" class="widget-box ui-sortable-handle" id="widget-box-3">
+                            <div class="widget-header">
+                                <h5 class="widget-title">洪水过程线</h5>
+
+                                <div class="widget-toolbar">
+                                    <a href="#modal-form2" data-toggle="modal" onclick="undateselect">
+                                        <i class="ace-icon fa fa-bars"></i>
+                                    </a>
+
+                                    <a href="#" data-action="collapse">
+                                        <i class="ace-icon fa fa-chevron-up"></i>
+                                    </a>
+
+                                    <a href="#" data-action="close">
+                                        <i class="ace-icon fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div id="mychart2" style="width: 100%;height:200px"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div id="modal-form" class="modal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="blue bigger">请选择需要展示的站点</h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="row">
+
+
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right">图形选择：</label>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div>
+                                                <label class="line-height-1 blue">
+                                                    <input name="pcp_type" value="1" type="radio"
+                                                           class="ace" checked/>
+                                                    <span class="lbl"> 折线图</span>
+                                                </label> <label class="line-height-1 blue">
+                                                <input name="pcp_type" value="2" type="radio"
+                                                       class="ace"/>
+                                                <span class="lbl"> 散点图</span>
+                                            </label>
+                                            </div>
+
+
+                                            <div class="hr hr-8 hr-dotted"></div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label class="control-label col-xs-12 col-sm-12 no-padding-right">站点选择：</label>
+                                        <div class="col-sm-12">
+                                            <select multiple="multiple" size="10" name="pcps[]"
+                                                    id="pcps">
+                                                <volist name="pcps" id="vo">
+
+                                                    <option value='{$vo.id}'>{$vo.name}</option>
+                                                </volist>
+                                            </select>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+
+                                <button id="button_pcp" class="btn btn-sm btn-primary" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-check"></i>
+                                    确定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- PAGE CONTENT ENDS -->
+
+                <div id="modal-form2" class="modal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="blue bigger">请选择需要展示的站点</h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="row">
+
+
+                                    <div class="space-2"></div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-xs-12 col-sm-3 no-padding-right">图形选择：</label>
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div>
+                                                <label class="line-height-1 blue">
+                                                    <input name="s2_type" value="1" type="radio"
+                                                           class="ace" checked/>
+                                                    <span class="lbl"> 折线图</span>
+                                                </label> <label class="line-height-1 blue">
+                                                <input name="s2_type" value="2" type="radio"
+                                                       class="ace"/>
+                                                <span class="lbl"> 散点图</span>
+                                            </label>
+                                            </div>
+
+
+                                            <div class="hr hr-8 hr-dotted"></div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+
+                                        <label class="control-label col-xs-12 col-sm-12 no-padding-right">站点选择：</label>
+                                        <div class="col-sm-12">
+                                            <select multiple="multiple" size="10" name="flows[]"
+                                                    id="flows">
+                                                <volist name="flows" id="vo">
+
+                                                    <option value='{$vo.id}'>{$vo.name}</option>
+                                                </volist>
+                                            </select>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+
+                                <button id="button_flow" class="btn btn-sm btn-primary" data-dismiss="modal">
+                                    <i class="ace-icon fa fa-check"></i>
+                                    确定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- PAGE CONTENT ENDS -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+    <include file="Public/footer"/>
+
+</div><!-- /.main-container -->
+
+<include file="Public/footerjs_scen"/>
+<!-- inline scripts related to this page -->
+<script src="__PUBLIC__/qwadmin/js/echarts.min.js"></script>
+<script src="__PUBLIC__/qwadmin/js/zdj/zdj-echart2.js"></script>
+<script src="__PUBLIC__/qwadmin/js/jquery.gritter.js"></script>
+<script src="__PUBLIC__/qwadmin/js/jquery.bootstrap-duallistbox.min.js"></script>
+<script type="text/javascript">
+
+    var selectid = {$s3};
+
+
+    function undateselect(){
+        $("#pcps").trigger("chosen:updated");
+        $("#flows").trigger("chosen:updated");
+
+    }
+
+    function retrievepcp() { //cellvalue表示当前单元格的值
+        id = selectid;
+        var s1type = $('input:radio[name="pcp_type"]:checked').val();
+        var pcpguages = $('#pcps').val();
+        reloadpcpChart(id, pcpguages, s1type);
+    }
+
+    function retrieveflow() { //cellvalue表示当前单元格的值
+        id = selectid;
+        var s2type = $('input:radio[name="s2_type"]:checked').val();
+        var flowguages = $('#flows').val();
+        reloadflowChart(id, flowguages, s2type);
+    }
+
+
+    function retrieve(id) { //cellvalue表示当前单元格的值
+        selectid = id;
+        var s1type = $('input:radio[name="pcp_type"]:checked').val();
+        var s2type = $('input:radio[name="s2_type"]:checked').val();
+        var pcpguages = $('#pcps').val();
+        var flowguages = $('#flows').val();
+        reloadpcpChart(id, pcpguages, s1type);
+        reloadflowChart(id, flowguages, s2type);
+    }
+    function exec_simulate(id) { //cellvalue表示当前单元格的值
+
+        $.gritter.add({
+            // (string | mandatory) the heading of the notification
+            title: '开始执行!',
+            // (string | mandatory) the text inside the notification
+            text: '请耐心等待！',
+            class_name: 'gritter-success',
+            position: 'bottom-right'
+        });
+        var jqxhr = $.getJSON("/wms/qwadmin/HMS/genalldata", "id=" + id, function (data) {
+            retrieve(id);
+            $.gritter.add({
+                // (string | mandatory) the heading of the notification
+                title: '执行完成!',
+                // (string | mandatory) the text inside the notification
+                text: '您可以洪水过程图中，查看复演结果！',
+                class_name: 'gritter-success',
+                position: 'bottom-right'
+            });
+
+
+
+            });
+
+    }
+
+    jQuery(function ($) {
+        var grid_selector = "#grid-table";
+        var pager_selector = "#grid-pager";
+        var gheight = $(window).height() - 340;
+        var gheight2 = $(window).height() - 320;
+        var tt = 3;
+        var parent_column = $(grid_selector).closest('[class*="col-"]');
+        $("#mychart1").css("height", parseInt(gheight / 2 + 25));
+        $("#mychart2").css("height", parseInt(gheight / 2 + 25));
+        //resize to fit page size
+        $(window).on('resize.jqGrid', function () {
+            $(grid_selector).jqGrid('setGridWidth', parent_column.width() - tt);
+            $("#mychart1").css("height", parseInt(gheight / 2 + 35));
+            $("#mychart2").css("height", parseInt(gheight / 2 + 35));
+        })
+
+
+        //resize on sidebar collapse/expand
+        $(document).on('settings.ace.jqGrid', function (ev, event_name, collapsed) {
+            if (event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed') {
+                //setTimeout is for webkit only to give time for DOM changes and then redraw!!!
+                setTimeout(function () {
+                    $(grid_selector).jqGrid('setGridWidth', parent_column.width() - tt);
+                }, 20);
+            }
+        })
+
+        //if your grid is inside another element, for example a tab pane, you should use its parent's width:
+        /**
+         $(window).on('resize.jqGrid', function () {
+					var parent_width = $(grid_selector).closest('.tab-pane').width();
+					$(grid_selector).jqGrid( 'setGridWidth', parent_width );
+				})
+         //and also set width when tab pane becomes visible
+         $('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+				  if($(e.target).attr('href') == '#mygrid') {
+					var parent_width = $(grid_selector).closest('.tab-pane').width();
+					$(grid_selector).jqGrid( 'setGridWidth', parent_width );
+				  }
+				})
+         */
+
+        function appliedformat3(cellvalue, options, cell) { //cellvalue表示当前单元格的值
+            var rs = '<a id="a_' + cell["id"] + '" href="#" onclick="exec_simulate(' + cell["id"] + ')"><span class="label label-info arrowed-right arrowed-in">执行</span></a>';
+           // var rs="";
+            return rs + '<a id="a_' + cell["id"] + '" href="#" onclick="retrieve(' + cell["id"] + ')"><span class="label label-info arrowed-right arrowed-in">查看</span></a>';
+        }
+
+        function spinnerformat(cellvalue, options, cell) { //cellvalue表示当前单元格的值
+            return cellvalue + ' <i id="spiner_' + cellvalue + '" style="visibility:hidden" class="ace-icon fa fa-spinner fa-spin orange bigger-125"></i>';
+        }
+
+        function format(cellvalue) { //cellvalue表示当前单元格的值
+
+            if (cellvalue == 1) {
+
+                return "常量（导入）";
+            }
+            if (cellvalue == 2) {
+
+                return "小时尺度";
+            }
+            if (cellvalue == 3) {
+
+                return "日尺度";
+            }
+            if (cellvalue == 4) {
+
+                return "月尺度";
+            }
+            if (cellvalue == 5) {
+
+                return "年尺度";
+            }
+
+
+        }
+
+
+        jQuery(grid_selector).jqGrid({
+            //direction: "rtl",
+            url: "{:U('HMS/getRows')}",
+            datatype: "json",
+            height: gheight2,
+
+            scrollOffset: 0,
+            ajaxSelectOptions: {
+                type: "Post",
+                cache: false
+            },
+            colNames: ['名称', '起始时间', '结束时间', '洪水重演'],
+            colModel: [
+                {name: 'projectname', index: 'projectname', width: 90, editable: false},
+                {name: 'starttime', index: 'starttime', width: 60, editable: false},
+                {name: 'endtime', index: 'endtime', width: 60, editable: false},
+                {name: 'id', index: 'id', width: 60, editable: false, formatter: appliedformat3},
+
+            ],
+            viewrecords: true,
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            pager: pager_selector,
+            altRows: true,
+            //toppager: true,
+
+
+            loadComplete: function () {
+                var table = this;
+                setTimeout(function () {
+                    styleCheckbox(table);
+
+                    updateActionIcons(table);
+                    updatePagerIcons(table);
+                    enableTooltips(table);
+                }, 0);
+            }
+
+            //,autowidth: true,
+
+
+            /**
+             ,
+             grouping:true,
+             groupingView : {
+						 groupField : ['name'],
+						 groupDataSorted : true,
+						 plusicon : 'fa fa-chevron-down bigger-110',
+						 minusicon : 'fa fa-chevron-up bigger-110'
+					},
+             caption: "Grouping"
+             */
+
+        });
+        $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+
+        //enable search/filter toolbar
+        //jQuery(grid_selector).jqGrid('filterToolbar',{defaultSearch:true,stringResult:true})
+        //jQuery(grid_selector).filterToolbar({});
+
+
+        //switch element when editing inline
+        function aceSwitch(cellvalue, options, cell) {
+            setTimeout(function () {
+                $(cell).find('input[type=checkbox]')
+                    .addClass('ace ace-switch ace-switch-5')
+                    .after('<span class="lbl"></span>');
+            }, 0);
+        }
+
+        //enable datepicker
+        function pickDate(cellvalue, options, cell) {
+            setTimeout(function () {
+                $(cell).find('input[type=text]')
+                    .datepicker({format: 'yyyy-mm-dd', autoclose: true});
+            }, 0);
+        }
+
+
+        //navButtons
+        jQuery(grid_selector).jqGrid('navGrid', pager_selector,
+            { 	//navbar options
+                edit: false,
+                editicon: 'ace-icon fa fa-pencil blue',
+                add: false,
+                addicon: 'ace-icon fa fa-plus-circle purple',
+                del: false,
+                delicon: 'ace-icon fa fa-trash-o red',
+                search: false,
+                searchicon: 'ace-icon fa fa-search orange',
+                refresh: false,
+                refreshicon: 'ace-icon fa fa-refresh green',
+                view: false,
+                viewicon: 'ace-icon fa fa-search-plus grey'
+            },
+            {
+                //search form
+                recreateForm: true,
+                afterShowSearch: function (e) {
+                    var form = $(e[0]);
+                    form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+                    style_search_form(form);
+                },
+                afterRedraw: function () {
+                    style_search_filters($(this));
+                }
+                ,
+                multipleSearch: true,
+                /**
+                 multipleGroup:true,
+                 showQuery: true
+                 */
+            },
+            {
+                //view record form
+                recreateForm: true,
+                beforeShowForm: function (e) {
+                    var form = $(e[0]);
+                    form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+                }
+            }
+        )
+
+
+        function style_edit_form(form) {
+            //enable datepicker on "sdate" field and switches for "stock" field
+            form.find('input[name=sdate]').datepicker({format: 'yyyy-mm-dd', autoclose: true})
+
+            form.find('input[name=stock]').addClass('ace ace-switch ace-switch-5').after('<span class="lbl"></span>');
+            //don't wrap inside a label element, the checkbox value won't be submitted (POST'ed)
+            //.addClass('ace ace-switch ace-switch-5').wrap('<label class="inline" />').after('<span class="lbl"></span>');
+
+
+            //update buttons classes
+            var buttons = form.next().find('.EditButton .fm-button');
+            buttons.addClass('btn btn-sm').find('[class*="-icon"]').hide();//ui-icon, s-icon
+            buttons.eq(0).addClass('btn-primary').prepend('<i class="ace-icon fa fa-check"></i>');
+            buttons.eq(1).prepend('<i class="ace-icon fa fa-times"></i>')
+
+            buttons = form.next().find('.navButton a');
+            buttons.find('.ui-icon').hide();
+            buttons.eq(0).append('<i class="ace-icon fa fa-chevron-left"></i>');
+            buttons.eq(1).append('<i class="ace-icon fa fa-chevron-right"></i>');
+        }
+
+        function style_delete_form(form) {
+            var buttons = form.next().find('.EditButton .fm-button');
+            buttons.addClass('btn btn-sm btn-white btn-round').find('[class*="-icon"]').hide();//ui-icon, s-icon
+            buttons.eq(0).addClass('btn-danger').prepend('<i class="ace-icon fa fa-trash-o"></i>');
+            buttons.eq(1).addClass('btn-default').prepend('<i class="ace-icon fa fa-times"></i>')
+        }
+
+        function style_search_filters(form) {
+            form.find('.delete-rule').val('X');
+            form.find('.add-rule').addClass('btn btn-xs btn-primary');
+            form.find('.add-group').addClass('btn btn-xs btn-success');
+            form.find('.delete-group').addClass('btn btn-xs btn-danger');
+        }
+
+        function style_search_form(form) {
+            var dialog = form.closest('.ui-jqdialog');
+            var buttons = dialog.find('.EditTable')
+            buttons.find('.EditButton a[id*="_reset"]').addClass('btn btn-sm btn-info').find('.ui-icon').attr('class', 'ace-icon fa fa-retweet');
+            buttons.find('.EditButton a[id*="_query"]').addClass('btn btn-sm btn-inverse').find('.ui-icon').attr('class', 'ace-icon fa fa-comment-o');
+            buttons.find('.EditButton a[id*="_search"]').addClass('btn btn-sm btn-purple').find('.ui-icon').attr('class', 'ace-icon fa fa-search');
+        }
+
+        function beforeDeleteCallback(e) {
+            var form = $(e[0]);
+            if (form.data('styled')) return false;
+
+            form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+            style_delete_form(form);
+
+            form.data('styled', true);
+        }
+
+        function beforeEditCallback(e) {
+            var form = $(e[0]);
+            form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+            style_edit_form(form);
+        }
+
+
+        //it causes some flicker when reloading or navigating grid
+        //it may be possible to have some custom formatter to do this as the grid is being created to prevent this
+        //or go back to default browser checkbox styles for the grid
+        function styleCheckbox(table) {
+            /**
+             $(table).find('input:checkbox').addClass('ace')
+             .wrap('<label />')
+             .after('<span class="lbl align-top" />')
+
+
+             $('.ui-jqgrid-labels th[id*="_cb"]:first-child')
+             .find('input.cbox[type=checkbox]').addClass('ace')
+             .wrap('<label />').after('<span class="lbl align-top" />');
+             */
+        }
+
+
+        //unlike navButtons icons, action icons in rows seem to be hard-coded
+        //you can change them like this in here if you want
+        function updateActionIcons(table) {
+            /**
+             var replacement =
+             {
+                 'ui-ace-icon fa fa-pencil' : 'ace-icon fa fa-pencil blue',
+                 'ui-ace-icon fa fa-trash-o' : 'ace-icon fa fa-trash-o red',
+                 'ui-icon-disk' : 'ace-icon fa fa-check green',
+                 'ui-icon-cancel' : 'ace-icon fa fa-times red'
+             };
+             $(table).find('.ui-pg-div span.ui-icon').each(function(){
+						var icon = $(this);
+						var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+						if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+					})
+             */
+        }
+
+        //replace icons with FontAwesome icons like above
+        function updatePagerIcons(table) {
+            var replacement =
+                {
+                    'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
+                    'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
+                    'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
+                    'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
+                };
+            $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                var icon = $(this);
+                var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+                if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+            })
+        }
+
+        function enableTooltips(table) {
+            $('.navtable .ui-pg-button').tooltip({container: 'body'});
+            $(table).find('.ui-pg-div').tooltip({container: 'body'});
+        }
+
+        //var selr = jQuery(grid_selector).jqGrid('getGridParam','selrow');
+
+        $(document).one('ajaxloadstart.page', function (e) {
+            $.jgrid.gridDestroy(grid_selector);
+            $('.ui-jqdialog').remove();
+        });
+
+        var demo1 = $('select[name="pcps[]"]').bootstrapDualListbox({
+            infoText: '<span class="label label-purple label-lg">显示全部{0}项</span>',
+            selectorMinimalHeight: "180",
+            infoTextFiltered: '<span class="label label-purple label-lg">符合过滤条件{0}项</span>',
+            filterTextClear: "显示全部",
+            filterPlaceHolder: "支持模糊过滤",
+            infoTextEmpty: '<span class="label label-purple label-lg">列表为空</span>'
+        });
+        var container1 = demo1.bootstrapDualListbox('getContainer');
+        container1.find('.btn').addClass('btn-white btn-info btn-bold');
+
+        var demo2 = $('select[name="flows[]"]').bootstrapDualListbox({
+            infoText: '<span class="label label-purple label-lg">显示全部{0}项</span>',
+            selectorMinimalHeight: "180",
+            infoTextFiltered: '<span class="label label-purple label-lg">符合过滤条件{0}项</span>',
+            filterTextClear: "显示全部",
+            filterPlaceHolder: "支持模糊过滤",
+            infoTextEmpty: '<span class="label label-purple label-lg">列表为空</span>'
+        });
+        var container2 = demo2.bootstrapDualListbox('getContainer');
+        container2.find('.btn').addClass('btn-white btn-info btn-bold');
+
+        $('select[name="*duallistbox_demo1[]*"]').css("height", "200px");
+
+        $("#button_pcp").on("click", retrievepcp);
+
+        $("#button_flow").on("click", retrieveflow);
+
+        $("#pcps").val({$s1});
+        $("#pcps").trigger("chosen:updated");
+
+        $("#flows").val({$s2});
+        $("#flows").trigger("chosen:updated");
+
+        demo1.bootstrapDualListbox('refresh', true);
+
+        demo2.bootstrapDualListbox('refresh', true);
+
+        retrieve({$s3});
+
+
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
+    <title>{$current['title']}-{$Think.CONFIG.sitename}</title>
+
+    <meta name="keywords" content="{$Think.CONFIG.keywords}"/>
+    <meta name="description" content="{$Think.CONFIG.description}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+          integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+          crossorigin=""/>
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/bootstrap.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/font-awesome.css"/>
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/jquery-ui.css"/>
+    <link href="__PUBLIC__/qwadmin/css/chosen.css" rel="stylesheet">
+    <!-- page specific plugin styles -->
+
+    <!-- text fonts -->
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/ace-fonts.css"/>
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/ace.css" class="ace-main-stylesheet" id="main-ace-style"/>
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/ace-part2.css" class="ace-main-stylesheet"/>
+    <![endif]-->
+
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="__PUBLIC__/qwadmin/css/ace-ie.css"/>
+
+
+    <link href="__PUBLIC__/qwadmin/css/ace-rtl.css" rel="stylesheet">
+
+    <![endif]-->
+    <style>
+
+        .ui-slider .ui-slider-handle::after, .ui-slider .ui-slider-handle::before {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            border-color: inherit;
+            border-image: none;
+            border-style: solid;
+            border-width: 0 1px;
+            content: "";
+            display: block;
+            height: 8px;
+            left: 5px;
+            position: absolute;
+            top: 4px;
+            width: 4px;
+        }
+    </style>
+
+    <!-- inline styles related to this page -->
+
+    <!-- ace settings handler -->
+    <script src="__PUBLIC__/qwadmin/js/ace-extra.js"></script>
+
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+    <!--[if lte IE 8]>
+    <script src="__PUBLIC__/qwadmin/js/html5shiv.js"></script>
+    <script src="__PUBLIC__/qwadmin/js/respond.js"></script>
+    <![endif]-->
+
+
+</head>
+<body class="no-skin">
+<include file="Public/header"/>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+                <include file="Public/set"/>
+
+                <!-- /section:settings.box -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <form class="form-horizontal" action="{:U('hru/insert')}" method="post">
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2"> 情景名称 </label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="title" id="title" placeholder="情景名称"
+                                           class="col-xs-10 col-sm-5" value="">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2"> 子流域 </label>
+                                <div class="col-sm-9">
+
+                                    <select
+                                            id="subsn" name="subsn" class="col-xs-10 col-sm-5">
+                                        <volist name="subbasins" id="vo">
+
+                                            <option value='{$vo.id}'>{$vo.name}</option>
+                                        </volist>
+
+
+                                    </select>
+
+
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2">
+                                    源水文响应单元 </label>
+                                <div class="col-sm-9">
+
+                                    <select
+                                            id="source" name="source" class="col-xs-10 col-sm-5">
+                                        <volist name="hru" id="vo">
+
+                                            <option value='{$vo.id}'>{$vo.name}</option>
+                                        </volist>
+
+
+                                    </select>
+
+
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2">
+                                    目标水文响应单元</label>
+                                <div class="col-sm-9">
+
+                                    <select
+                                            id="target" name="target" class="col-xs-10 col-sm-5">
+                                        <volist name="hru" id="vo">
+
+                                            <option value='{$vo.id}'>{$vo.name}</option>
+                                        </volist>
+
+
+                                    </select>
+
+
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2">
+                                    源水文响应单元占子流域百分比 </label>
+                                <div class="col-sm-1">
+                                    <input type="text" name="sf" id="sf" placeholder="百分比"
+                                           class="col-xs-10 col-sm-12" value="">
+
+                                </div>
+                                <label class="col-xs-1 control-label no-padding-right" for="form-field-2"> 面积 </label>
+                                <div class="col-sm-3">
+                                    <input type="text" name="sa" id="sa" placeholder="面积"
+                                           class="col-xs-10 col-sm-4" value="">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle">（单位：平方千米）</span>
+											</span>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2">
+                                    面积和比例调控 </label>
+                                <div class="col-sm-4">
+                                    <div id="slider-eq">
+                                        <span class="ui-slider-red">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2">
+                                    目标水文响应单元占子流域百分比 </label>
+                                <div class="col-sm-1">
+                                    <input type="text" name="tf" id="tf" placeholder="百分比"
+                                           class="col-xs-10 col-sm-12" value="">
+
+                                </div>
+                                <label class="col-xs-1 control-label no-padding-right" for="form-field-2"> 面积 </label>
+                                <div class="col-sm-3">
+                                    <input type="text" name="ta" id="ta" placeholder="面积"
+                                           class="col-xs-10 col-sm-4" value="">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle">（单位：平方千米）</span>
+											</span>
+                                    <input type="hidden" id="hsf">
+                                    <input type="hidden" id="hsa">
+                                    <input type="hidden" id="htf">
+                                    <input type="hidden" id="hta">
+
+                                </div>
+
+                            </div>
+
+                            <div class="space-4"></div>
+
+                            <div class="col-md-offset-2 col-md-9">
+                                <button class="btn btn-info" type="submit">
+                                    <i class="icon-ok bigger-110"></i>
+                                    提交
+                                </button>
+
+                                &nbsp; &nbsp; &nbsp;
+                                <button class="btn" type="reset">
+                                    <i class="icon-undo bigger-110"></i>
+                                    重置
+                                </button>
+                            </div>
+                        </form>
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+    <include file="Public/footer"/>
+
+</div><!-- /.main-container -->
+
+<include file="Public/footerjs"/>
+<!-- inline scripts related to this page -->
+<script src="__PUBLIC__/qwadmin/js/jquery-ui.custom.js"></script>
+<script>
+
+    $(function () {
+
+
+        $("#subsn").change(function () {
+            var select = $("#subsn option:selected").val();
+
+            $.getJSON("{:U('Hru/select')}", {sub_id: select}, function (data) {
+                lineselect(data);
+            });
+
+
+        });
+
+
+        function lineselect(arr) {
+            $("#source").empty();
+            $("#target").empty();
+            $(arr).each(function (i) {
+                $("#source").append("<option value=\"" + arr[i].id + "\">" + arr[i].name + "</option>")
+                $("#target").append("<option value=\"" + arr[i].id + "\">" + arr[i].name + "</option>")
+            });
+        }
+
+
+        $("#slider-eq > span").css({width: '90%', 'float': 'left', margin: '15px'}).each(function () {
+            // read initial values from markup and remove that
+            var value = parseInt($(this).text(), 10);
+            $(this).empty().slider({
+                value: value,
+                range: "min",
+                animate: true,
+
+                slide: function (event, ui) {
+                   // console.log(ui.value);
+
+
+                    $("#sf").eq(0).val( ($("#hsf").eq(0).val()-ui.value/100).toFixed(2));
+                    $("#sa").eq(0).val(   ($("#hsa").eq(0).val()*  $("#sf").eq(0).val()/$("#hsf").eq(0).val()).toFixed(2));
+                    $("#tf").eq(0).val( ($("#htf").eq(0).val()*1+ui.value/100).toFixed(2));
+                    $("#ta").eq(0).val(   ($("#hta").eq(0).val()*  $("#tf").eq(0).val()/$("#htf").eq(0).val()).toFixed(2));
+                }
+
+            });
+        });
+
+        $("#source").change(function () {
+            var select = $("#source option:selected").val();
+            var select2 = $("#target option:selected").val();
+            $.getJSON("{:U('Hru/hruinfo')}", {v1: select, v2: select2}, function (data) {
+                initslider(data);
+            });
+
+
+        });
+
+        $("#target").change(function () {
+            var select = $("#source option:selected").val();
+            var select2 = $("#target option:selected").val();
+            $.getJSON("{:U('Hru/hruinfo')}", {v1: select, v2: select2}, function (data) {
+                initslider(data);
+            });
+        });
+
+        function initslider(data) {
+            $("#slider-eq > span").slider("option", "max", data["sf"] * 10000);
+            $("#slider-eq > span").slider("option", "min", 0);
+            $("#slider-eq > span").slider("option", "value", 0);
+            $("#sf").eq(0).val((data["sf"] * 100).toFixed(2));
+            $("#sa").eq(0).val((data["sa"] * 1).toFixed(2));
+            $("#tf").eq(0).val((data["tf"] * 100).toFixed(2));
+            $("#ta").eq(0).val((data["ta"] * 1).toFixed(2));
+
+            $("#hsf").eq(0).val((data["sf"] * 100).toFixed(2));
+            $("#hsa").eq(0).val((data["sa"] * 1).toFixed(2));
+            $("#htf").eq(0).val((data["tf"] * 100).toFixed(2));
+            $("#hta").eq(0).val((data["ta"] * 1).toFixed(2));
+
+        }
+
+        var select = $("#source option:selected").val();
+        var select2 = $("#target option:selected").val();
+        $.getJSON("{:U('Hru/hruinfo')}", {v1: select, v2: select2}, function (data) {
+            initslider(data);
+        });
+
+
+    });
+
+
+</script>
+
+</body>
+</html>

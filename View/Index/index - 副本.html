@@ -1,0 +1,199 @@
+<include file="Public/head"/>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
+      integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+      crossorigin=""/>
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
+        integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+        crossorigin=""></script>
+
+<style type="text/css">
+    #mapid {
+        height: 560px;
+    }
+</style>
+<body class="no-skin">
+<include file="Public/header"/>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+        <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+
+                <include file="Public/set"/>
+                <include file="Public/chart"/>
+                <!-- /section:settings.box -->
+                <div class="row">
+                    <div class="col-xs-12">
+
+
+                        <div id="mapid"></div>
+
+
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+    <include file="Public/footer"/>
+
+</div><!-- /.main-container -->
+
+<include file="Public/footerjs"/>
+
+
+<script src="__PUBLIC__/qwadmin/js/ace/ace.charts.js"></script>
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    $(function () {
+
+
+        $("#update").click(function () {
+
+            $("#upmsg").html("");
+            $("#upmsg").addClass("ace-icon fa fa-refresh fa-spin blue");
+            $.ajax({
+                type: 'GET',
+                url: '{$Think.CONFIG.UPDATE_URL}?v={$Think.CONFIG.Version}&callback=?',
+                success: function (json) {
+                    if (json.result == 'no') {
+                        $("#upmsg").html("目前还没有适合您当前版本的更新！").removeClass();
+                    } else if (json.result == 'yes') {
+                        $("#upmsg").html("检查到新版本 " + json.ver + "，请前往“系统设置”->“<a  href=\"{:U('Update/update')}\">在线升级</a>”").removeClass();
+                    }
+                },
+                error: function () {
+                    $("#upmsg").html("悲剧了，网络故障，请稍后再试！").removeClass();
+                },
+                dataType: 'json'
+            });
+
+        });
+    })
+    $(function () {
+        $(".btn-info.submit").click(function () {
+            var content = $("#content").val();
+            if (content == '') {
+                bootbox.dialog({
+                    title: '友情提示：',
+                    message: "反馈内容必须填写。",
+                    buttons: {
+                        "success": {
+                            "label": "确定",
+                            "className": "btn-danger"
+                        }
+                    }
+                });
+                return;
+            }
+
+            $("#form").submit();
+        });
+    });
+
+    function styleFunction(feature) {
+
+
+    }
+
+    $(document).ready(function () {
+
+        var mymap = L.map('mapid').setView([24.987509, 118.460252], 10);
+
+
+        var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        var osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+        var osm = new L.TileLayer(osmUrl, {minZoom: 4, maxZoom: 13, attribution: osmAttrib});
+        mymap.addLayer(osm);
+        $.get("/qwadmin/Public/geojson/watershed.json", function (data) {
+            var geolay = L.geoJSON(data);
+            geolay.addTo(mymap);
+            geolay.setStyle({
+                weight: 1,
+                opacity: 1,
+                color: 'blue',
+                dashArray: '3',
+                fillOpacity: 0.1
+            });
+            console.log("here");
+
+        });
+
+        var geojsonMarkerOptions = {
+            radius: 3,
+            fillColor: "#ff7800",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+
+
+
+
+
+        var rainIcon = L.icon({
+            iconUrl: '/qwadmin/Public/icon/rainguage.png',
+            iconSize: [16, 16]
+        });
+
+        var hydIcon = L.icon({
+            iconUrl: '/qwadmin/Public/icon/hydguage.png',
+            iconSize: [16, 16]
+        });
+       // L.marker([50.505, 30.57], {icon: myIcon}).addTo(map);
+
+
+
+        function onMarkerClick(e) {
+            $('#ace-chart-btn').toggleClass('open');
+            $('#ace-chart-box').toggleClass('open');
+        }
+
+        $.get("/qwadmin/Public/geojson/monitorpoint.json", function (data) {
+            var geolay = L.geoJSON(data, {
+                pointToLayer: function (feature, latlng) {
+
+                   // return L.circleMarker(latlng, geojsonMarkerOptions);
+
+                    if(feature.properties.Type=="RNG")
+                    {return L.marker(latlng, {icon: rainIcon}).on('click',onMarkerClick);}
+                    else if(feature.properties.Type=="L")
+                    {
+
+                        return L.marker(latlng, {icon: hydIcon}).on('click',onMarkerClick);
+                    }
+
+
+                }
+            });
+            geolay.addTo(mymap);
+            geolay.setStyle({
+                weight: 3,
+                opacity: 1,
+                color: 'red',
+                dashArray: '3',
+                fillOpacity: 0.1
+            });
+            console.log("here");
+
+        });
+
+    });
+
+
+</script>
+</body>
+</html>

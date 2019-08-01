@@ -1,0 +1,150 @@
+<include file="Public/head"/>
+<body class="no-skin">
+<include file="Public/header"/>
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('main-container', 'fixed')
+        } catch (e) {
+        }
+    </script>
+
+    <include file="Public/sidebar"/>
+    <div class="main-content">
+        <div class="main-content-inner">
+            <!-- #section:basics/content.breadcrumbs -->
+            <include file="Public/breadcrumbs"/>
+
+            <!-- /section:basics/content.breadcrumbs -->
+            <div class="page-content">
+                <include file="Public/set"/>
+
+                <!-- /section:settings.box -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- PAGE CONTENT BEGINS -->
+                        <form class="form-horizontal" action="{:U('Pointsource/insert2')}" method="post">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2"> 点源名称 </label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="title" id="title" placeholder="点源名称"
+                                           class="col-xs-10 col-sm-5" value="">
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2"> 汇入子流域 </label>
+                                <div class="col-sm-9">
+
+                                    <select
+                                            id="sbid" name="sbid" class="col-xs-10 col-sm-5">
+                                        <volist name="subbasins" id="vo">
+
+                                            <option value='{$vo.id}'>{$vo.name}</option>
+                                        </volist>
+
+
+                                    </select>
+
+
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2"> 时间尺度 </label>
+                                <div class="col-sm-9">
+
+                                    <select
+                                            id="timescale" name="timescale" class="col-xs-10 col-sm-5">
+                                        <volist name="timescale" id="vo">
+
+                                            <option value='{$vo.id}'>{$vo.name}</option>
+                                        </volist>
+
+
+                                    </select>
+
+
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle">请务必选择与导入点源数据相一致的时间尺度。</span>
+											</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2"> 导入文件 </label>
+                                <div class="col-sm-9">
+
+                                    <select
+                                            id="fileid" name="fileid" class="col-xs-10 col-sm-5">
+                                        <volist name="filelist" id="vo">
+
+                                            <option value='{$vo.id}'>{$vo.file_name}</option>
+                                        </volist>
+
+
+                                    </select>
+
+
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label no-padding-right" for="form-field-2"> 点源描述 </label>
+                                <div class="col-sm-9">
+
+                                    <textarea class="col-sm-7" id="form-field-8" placeholder="Default Text" rows="10"></textarea>
+                                    <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle"></span>
+											</span>
+                                </div>
+                            </div>
+
+
+
+                            <div class="space-4"></div>
+
+                            <div class="col-md-offset-2 col-md-9">
+                                <button class="btn btn-info" type="submit">
+                                    <i class="icon-ok bigger-110"></i>
+                                    提交
+                                </button>
+
+                                &nbsp; &nbsp; &nbsp;
+                                <button class="btn" type="reset">
+                                    <i class="icon-undo bigger-110"></i>
+                                    重置
+                                </button>
+                            </div>
+                        </form>
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+    <include file="Public/footer"/>
+
+</div><!-- /.main-container -->
+
+<include file="Public/footerjs"/>
+<!-- inline scripts related to this page -->
+
+</body>
+</html>
